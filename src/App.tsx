@@ -11,7 +11,14 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   gap: 20px;
-  background-color: #ea9898
+  background-color: #d7d3de;
+  // align-items: center; /* Центрирование по вертикали */
+  // min-height: 100vh; /* Высота контейнера на весь экран */
+
+  // @media (max-width: 768px) {
+  //   flex-direction: column; /* Меняем направление на вертикальное */
+  //   align-items: center; /* Центрируем дочерние элементы */
+  // }
 `
 
 function App() {
