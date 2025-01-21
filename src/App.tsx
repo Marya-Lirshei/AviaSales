@@ -3,6 +3,7 @@ import styled from "styled-components";
 import "./App.css";
 import AsidePanel from "./components/AsidePanel/AsidePanel";
 import TicketsList from "./components/TicketsList/TicketsList";
+import { useEffect, useState } from "react";
 
 const Wrapper = styled.div`
   // margin: 0, auto;
@@ -12,16 +13,13 @@ const Wrapper = styled.div`
   justify-content: center;
   gap: 20px;
   background-color: #d7d3de;
-  // align-items: center; /* Центрирование по вертикали */
-  // min-height: 100vh; /* Высота контейнера на весь экран */
-
-  // @media (max-width: 768px) {
-  //   flex-direction: column; /* Меняем направление на вертикальное */
-  //   align-items: center; /* Центрируем дочерние элементы */
-  // }
+  // align-items: center;
+  // min-height: 100vh; 
 `
 
 function App() {
+
+
   const tickets = [
     {
       price: 12000, // цена в рублях

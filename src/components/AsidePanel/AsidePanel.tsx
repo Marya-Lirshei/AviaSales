@@ -1,3 +1,6 @@
+import { useSelector, useDispatch } from "react-redux";
+import { checkboxReducer } from "../store/checkboxReducer";
+import { toggleCheckbox } from "../store/checkboxReducer";
 import styled from "styled-components";
 
 const AsidePanelContainer = styled.div`
@@ -9,7 +12,7 @@ const AsidePanelContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
 `;
 
 const Title = styled.div`
@@ -33,7 +36,7 @@ const CheckboxLabel = styled.label`
   color: #555;
   cursor: pointer;
 
-  input[type='checkbox'] {
+  input[type="checkbox"] {
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -44,33 +47,55 @@ const CheckboxLabel = styled.label`
   }
 `;
 
-function AsidePanel() {
+const AsidePanel: React.FC = () => {
+  const checkboxes = useSelector((state: any)=>state.checkboxes)
+  const dispatch = useDispatch()
+
+  const handleCheckboxChange = (name: string) => {
+    dispatch(toggleCheckbox(name));
+  };
+
+
+
   return (
     <AsidePanelContainer>
-      <Title>
-        КОЛИЧЕСТВО ПЕРЕСАДОК
-      </Title>
+      <Title>КОЛИЧЕСТВО ПЕРЕСАДОК</Title>
       <CheckboxContainer>
         <CheckboxLabel>
-          <input type="checkbox" />
+          <input type="checkbox" 
+          checked={checkboxes.option1}
+          onChange={() => handleCheckboxChange('option1')}
+          />
           Все
         </CheckboxLabel>
         <CheckboxLabel>
-          <input type="checkbox" />
+          <input type="checkbox" 
+          checked={checkboxes.option2}
+          onChange={() => handleCheckboxChange('option2')}
+          />
           Без пересадок
         </CheckboxLabel>
         <CheckboxLabel>
-          <input type="checkbox" />1 пересадка
+          <input type="checkbox" 
+          checked={checkboxes.option3}
+          onChange={() => handleCheckboxChange('option3')}
+          />1 пересадка
         </CheckboxLabel>
         <CheckboxLabel>
-          <input type="checkbox" />2 пересадка
+          <input type="checkbox" 
+          checked={checkboxes.option4}
+          onChange={() => handleCheckboxChange('option4')}
+          />2 пересадка
         </CheckboxLabel>
         <CheckboxLabel>
-          <input type="checkbox" />3 пересадка
+          <input type="checkbox" 
+          checked={checkboxes.option5}
+          onChange={() => handleCheckboxChange('option5')}
+          />3 пересадка
         </CheckboxLabel>
       </CheckboxContainer>
     </AsidePanelContainer>
   );
-}
+};
 
 export default AsidePanel;
