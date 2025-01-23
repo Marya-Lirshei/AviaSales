@@ -23,7 +23,7 @@ export const ticketsPackReducer = (
     case GET_TICKETS_PACK:
       return {
         ...state,
-        ticketsPack: [...state.ticketsPack, ...action.payload], // Доб новые билеты
+        ticketsPack: [...state.ticketsPack, ...action.payload], 
       };
     case SET_TICKETS_STOP:
       return {
@@ -34,3 +34,4 @@ export const ticketsPackReducer = (
       return state;
   }
 };
+

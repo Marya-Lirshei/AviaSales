@@ -39,7 +39,7 @@ export const getTicketsPack =
           type: SET_TICKETS_STOP,
           payload: true,
         });
-        // stop = true;
+        stop = true;
       } catch (error) {
         count++;
         if (count > 3) {

@@ -1,15 +1,11 @@
 import { styled } from "styled-components";
-import { Ticket } from "../../types";
 import TicketsItem from "../TicketsItem/TicketsItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchId } from "../asyncAction/AsyncSearchId";
 import { useEffect } from "react";
 import { RootState } from "../store/store";
 import { getTicketsPack } from "../asyncAction/AsyncTicketsPack";
-
-interface TicketsListProps {
-  tickets: Ticket[];
-}
+import { TypeTicket } from "../../types";
 
 const ListWrapper = styled.ul`
   display: flex;
@@ -21,15 +17,16 @@ const ListWrapper = styled.ul`
   background-color: #d7d3de; //#a57f7f
 `;
 
-const TicketsList: React.FC<TicketsListProps> = ({ tickets }) => {
+const TicketsList: React.FC = () => {
 
   const dispatch = useDispatch()
   const searchId = useSelector((state: RootState)=> state.searchId.searchId)
   console.log('searchId: ', searchId);
-  const ticketsR= useSelector((state: RootState)=> state.ticketsPack.ticketsPack)
-  console.log('ticketsR: ', ticketsR);
+  const ticketsPack= useSelector((state: RootState)=> state.ticketsPack.ticketsPack)
+  console.log('ticketsPack: ', ticketsPack);
   const stop = useSelector((state: RootState)=> state.ticketsPack.stop)
   console.log('stop: ', stop);
+  const filters = useSelector((state: RootState) => state.checkboxes);
 
   useEffect(()=>{
     dispatch(getSearchId())
@@ -39,21 +36,33 @@ const TicketsList: React.FC<TicketsListProps> = ({ tickets }) => {
     if(searchId && !stop){
       dispatch(getTicketsPack(searchId))
     }
-  }, [searchId, ticketsR, stop])  
+  }, [searchId, ticketsPack, stop])  
+
+  const filterTickets = (ticketsPack: TypeTicket[]) => {
+    return ticketsPack.filter((ticket) => {
+      const stopsCount = ticket.segments[0].stops.length; 
+
+      if (filters.all) return true;
+
+      if (filters.noTransfers && stopsCount === 0) return true; 
+      if (filters.oneTransfer && stopsCount === 1) return true; 
+      if (filters.twoTransfers && stopsCount === 2) return true; 
+      if (filters.threeTransfers && stopsCount === 3) return true; 
+
+      return false;
+    });
+  };
+  const filteredTickets = filterTickets(ticketsPack).slice(0, 5);
   
   return (
     <ListWrapper>
-      {tickets.map((ticket, index) => (
+      {filteredTickets.map((ticket: TypeTicket, index: number)=>(
         <TicketsItem
-          key={index}
-          price={ticket.price}
-          countryOfDispatch={ticket.countryOfDispatch}
-          countryOfArrival={ticket.countryOfArrival}
-          duration={ticket.duration}
-          departureTime={ticket.departureTime}
-          arrivalTime={ticket.arrivalTime}
+        key={index}
+        price={ticket.price}
+        segments={ticket.segments}
         />
-      ))}
+        ))}
     </ListWrapper>
   );
 };

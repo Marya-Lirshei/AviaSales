@@ -9,7 +9,7 @@ import { checkboxReducer } from './checkboxReducer';
 const rootReducer = combineReducers({
     ticketsPack: ticketsPackReducer,
     searchId: searchIdReducer,
-    checkboxes: checkboxReducer
+    checkboxes: checkboxReducer,
 })
 
 export const store= createStore(
