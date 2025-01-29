@@ -1,3 +1,25 @@
+export const enum TabsTicket {
+  CHEAPEST = 'CHEAPEST',
+  FASTEST = 'FASTEST',
+  OPTIMAL = 'OPTIMAL',
+}
+
+export type TState = {
+  tabName: TabsTicket;
+}
+
+export type TSetTabsAction = {
+  type: TabsActionTypes;
+  payload: TabsTicket;
+};
+
+export enum TabsActionTypes {
+  SET_TABS = 'SET_TABS',
+}
+
+export type TAction = TSetTabsAction 
+
+
 export type TypeTicket = {
   // Цена в рублях
   price: number;

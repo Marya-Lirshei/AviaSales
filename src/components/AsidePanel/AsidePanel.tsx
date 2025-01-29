@@ -58,6 +58,7 @@ const CheckboxLabel = styled.label`
 const AsidePanel: React.FC = () => {
   const dispatch = useDispatch();
   const checkboxes = useSelector((state: RootState) => state.checkboxes);
+  console.log('checkboxes: ', checkboxes);
 
   return (
     <AsidePanelContainer>
@@ -99,7 +100,7 @@ const AsidePanel: React.FC = () => {
               dispatch(toggleCheckboxTwoTransfers(e.target.checked))
             }
           />
-          2 пересадка
+          2 пересадки
         </CheckboxLabel>
         <CheckboxLabel>
           <input
@@ -109,7 +110,7 @@ const AsidePanel: React.FC = () => {
               dispatch(toggleCheckboxThreeTransfers(e.target.checked))
             }
           />
-          3 пересадка
+          3 пересадки
         </CheckboxLabel>
       </CheckboxContainer>
     </AsidePanelContainer>

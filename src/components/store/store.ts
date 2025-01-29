@@ -5,11 +5,13 @@ import { thunk } from "redux-thunk";
 import { searchIdReducer } from './searchIdReducer';
 import { ticketsPackReducer } from './ticketsPackReducer';
 import { checkboxReducer } from './checkboxReducer';
+import { tabsReducer } from "./tabsReducer";
 
 const rootReducer = combineReducers({
     ticketsPack: ticketsPackReducer,
     searchId: searchIdReducer,
     checkboxes: checkboxReducer,
+    tabs: tabsReducer,
 })
 
 export const store= createStore(

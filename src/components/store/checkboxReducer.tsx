@@ -17,7 +17,7 @@ interface CheckboxState {
 
 const initialState: CheckboxState = {
   all: false,
-  noTransfers: false,
+  noTransfers: true,
   oneTransfer: false,
   twoTransfers: false,
   threeTransfers: false,
@@ -53,7 +53,6 @@ export const checkboxReducer = (
           : "threeTransfers"]: action.payload,
       };
 
-      // Если все чекбоксы включены, включаем "Все"
       if (
         newState.noTransfers &&
         newState.oneTransfer &&
