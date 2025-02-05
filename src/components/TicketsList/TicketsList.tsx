@@ -1,63 +1,24 @@
-import { styled } from "styled-components";
 import TicketsItem from "../TicketsItem/TicketsItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchId } from "../asyncAction/AsyncSearchId";
-import { useEffect, useState } from "react";
-import { RootState } from "../store/store";
-import { getTicketsPack } from "../asyncAction/AsyncTicketsPack";
-import { TabsTicket, TypeTicket } from "../../types";
-import Tabs from "../../Tabs";
-
-const WrapperUl = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ListWrapper = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 500px;
-  padding: 0px;
-  margin: 0;
-  background-color: #d7d3de; //#a57f7f
-`;
-
-const ShowMoreButton = styled.button`
-  padding: 10px 20px;
-  background-color: #41a891; /* Основной цвет кнопки */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin: 20px auto; /* Центрирование по горизонтали и отступ сверху */
-  display: block; /* Чтобы margin: auto работал */
-  transition: background-color 0.3s ease; /* Плавное изменение цвета */
-
-  &:hover {
-    background-color: #45a049; /* Цвет при наведении */
-  }
-
-  &:active {
-    background-color: #3d8b40; /* Цвет при нажатии */
-  }
-`;
+import { useEffect, useState, useMemo } from "react";
+import { RootState } from "../../store/store";
+import { TypeTicket } from "../../types";
+import Tabs from "../Tabs/Tabs";
+import { useTicketsPack } from "../asyncAction/useTicketsPack";
+import { ListWrapper, ShowMoreButton, WrapperUl, Notification } from "./theme";
+import { isTicketMatchesFilters, sortTickets } from "../../utils/ticketUtils";
 
 const TicketsList: React.FC = () => {
+  const { tickets, error } = useTicketsPack();
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   const dispatch = useDispatch();
-  const searchId = useSelector((state: RootState) => state.searchId.searchId);
-  console.log("searchId: ", searchId);
-  const ticketsPack = useSelector(
-    (state: RootState) => state.ticketsPack.ticketsPack
-  );
-  console.log("ticketsPack: ", ticketsPack);
-  const stop = useSelector((state: RootState) => state.ticketsPack.stop);
-  console.log("stop: ", stop);
-  const filters = useSelector((state: RootState) => state.checkboxes);
-  console.log("filters: ", filters);
+  const filters = useSelector((state: RootState) => state.checkbox.checkbox);
   const tabName = useSelector((state: RootState) => state.tabs.tabName);
-  console.log('tabName: ', tabName);
 
   const [visibleTickets, setVisibleTickets] = useState(5);
 
@@ -65,49 +26,17 @@ const TicketsList: React.FC = () => {
     dispatch(getSearchId());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (searchId && !stop) {
-      dispatch(getTicketsPack(searchId));
-    }
-  }, [searchId, ticketsPack, stop]);
 
-  const filterTickets = (ticketsPack: TypeTicket[]) => {
-    return ticketsPack.filter((ticket) => {
-      const stopsCount = ticket.segments[0].stops.length;
+  const filteredTickets = useMemo(() => {
+    return tickets.filter((ticket) => isTicketMatchesFilters(ticket, filters));
+  }, [tickets, filters]);
 
-      if (filters.all) return true;
+  const sortedTickets = useMemo(() => {
+    return sortTickets(filteredTickets, tabName);
+  }, [filteredTickets, tabName]);
+  
 
-      if (filters.noTransfers && stopsCount === 0) return true;
-      // console.log('filters.noTransfers: ', filters.noTransfers);
-      if (filters.oneTransfer && stopsCount === 1) return true;
-      if (filters.twoTransfers && stopsCount === 2) return true;
-      if (filters.threeTransfers && stopsCount === 3) return true;
-
-      return false;
-    });
-  };
-
-  const sortTickets = (tickets: TypeTicket[], tabName: TabsTicket) => {
-    switch (tabName) {
-      case TabsTicket.CHEAPEST:
-        return [...tickets].sort((a, b) => a.price - b.price);
-
-      case TabsTicket.FASTEST:
-        return [...tickets].sort(
-          (a, b) =>
-          a.segments[0].duration - b.segments[0].duration)
-          
-          
-          default:
-            return tickets; 
-          }
-        }; 
-  const filteredTickets = filterTickets(ticketsPack);
-
-  const sortedTickets = sortTickets(filteredTickets, tabName).slice(
-    0,
-    visibleTickets
-  );
+  const isAnyFilterSelected = Object.values(filters).some((value) => value);
 
   const handleShowMore = () => {
     setVisibleTickets((prevCount) => prevCount + 5);
@@ -117,7 +46,7 @@ const TicketsList: React.FC = () => {
     <WrapperUl>
       <Tabs />
       <ListWrapper>
-        {sortedTickets.map((ticket: TypeTicket, index: number) => (
+        {sortedTickets.slice(0, visibleTickets).map((ticket: TypeTicket, index: number) => (
           <TicketsItem
             key={index}
             price={ticket.price}
@@ -125,10 +54,12 @@ const TicketsList: React.FC = () => {
           />
         ))}
       </ListWrapper>
-      <ShowMoreButton onClick={handleShowMore}>Показать еще</ShowMoreButton>
+      {isAnyFilterSelected ? (
+        <ShowMoreButton onClick={handleShowMore}>Показать еще</ShowMoreButton>
+      ) : (
+        <Notification>Выберите количество пересадок.</Notification>
+      )}
     </WrapperUl>
   );
 };
 export default TicketsList;
-
-

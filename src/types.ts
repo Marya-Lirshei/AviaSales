@@ -1,10 +1,39 @@
+export const enum CheckboxId {
+  ALL = 'ALL',
+  ONE_TRANSFER = 'ONE_TRANSFER',
+  TWO_TRANSFER = 'TWO_TRANSFER',
+  THREE_TRANSFER = 'THREE_TRANSFER',
+  NONE_TRANSFER = 'NONE_TRANSFER',
+}
+
+export type CheckboxState = {
+  [key in CheckboxId]: boolean;
+};
+
+export type TStateCheckbox = {
+  checkbox: CheckboxState,
+}
+
+export type TSetCheckboxAction = {
+  type: CheckboxActionTypes,
+  payload: Partial<CheckboxState>,
+}
+
+export enum CheckboxActionTypes {
+  TURN_ON = 'TURN_ON',
+}
+
+export type TActionCheckbox = TSetCheckboxAction;
+
+
+
 export const enum TabsTicket {
   CHEAPEST = 'CHEAPEST',
   FASTEST = 'FASTEST',
   OPTIMAL = 'OPTIMAL',
 }
 
-export type TState = {
+export type TStateTab = {
   tabName: TabsTicket;
 }
 
@@ -17,8 +46,16 @@ export enum TabsActionTypes {
   SET_TABS = 'SET_TABS',
 }
 
-export type TAction = TSetTabsAction 
+export type TActionTab = TSetTabsAction 
 
+export type Segment = {
+  stops: string[];
+};
+
+export interface TicketsItemProps {
+  price: number;
+  segments: TypeTicket["segments"];
+}//это из ticketsItem
 
 export type TypeTicket = {
   // Цена в рублях

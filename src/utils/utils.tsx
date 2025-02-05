@@ -25,5 +25,3 @@ export function convertDate(time: string, duration: number) {
   // Возвращаем результат в формате "HH:MM - HH:MM"
   return `${departure} - ${arrival}`;
 }
-
-

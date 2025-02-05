@@ -1,118 +1,86 @@
 import { useSelector, useDispatch } from "react-redux";
-// import { checkboxReducer } from "../store/checkboxReducer";
-// import { toggleCheckbox } from "../store/checkboxReducer";
-import styled from "styled-components";
-import { RootState } from "../store/store";
+import { RootState } from "../../store/store";
+import { CheckboxActionTypes, CheckboxId } from "../../types";
 import {
-  toggleCheckboxAll,
-  toggleCheckboxNoTransfers,
-  toggleCheckboxOneTransfer,
-  toggleCheckboxThreeTransfers,
-  toggleCheckboxTwoTransfers,
-} from "../asyncAction/AsyncCheckbox";
-
-const AsidePanelContainer = styled.div`
-  width: 190px;
-  height: 210px;
-  padding: 20px;
-  background-color: #f5f5f5;
-  font-size: 14px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-`;
-
-const Title = styled.div`
-  font-size: 12px;
-  // font-weight: bold;
-  margin-bottom: 15px;
-  color: #333;
-`;
-
-const CheckboxContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  color: #555;
-  cursor: pointer;
-
-  input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-  }
-
-  &:hover {
-    color: #000;
-  }
-`;
+  AsidePanelContainer,
+  CheckboxContainer,
+  CheckboxLabel,
+  Title,
+} from "./theme";
 
 const AsidePanel: React.FC = () => {
   const dispatch = useDispatch();
-  const checkboxes = useSelector((state: RootState) => state.checkboxes);
-  console.log('checkboxes: ', checkboxes);
+  const checkedCheckbox = useSelector(
+    (state: RootState) => state.checkbox.checkbox
+  );
+
+  const checkboxes = [
+    { id: CheckboxId.ALL, label: "Все", name: "Все" },
+    {
+      id: CheckboxId.NONE_TRANSFER,
+      label: "Без пересадок",
+      name: "Без пересадок",
+    },
+    { id: CheckboxId.ONE_TRANSFER, label: "1 пересадка", name: "1 пересадка" },
+    { id: CheckboxId.TWO_TRANSFER, label: "2 пересадки", name: "2 пересадки" },
+    {
+      id: CheckboxId.THREE_TRANSFER,
+      label: "3 пересадки",
+      name: "3 пересадки",
+    },
+  ];
+
+  const handleCheckboxChange = (id: CheckboxId) => {
+    const updatedCheckboxes = { ...checkedCheckbox };
+    updatedCheckboxes[id] = !updatedCheckboxes[id];
+
+    if (id === CheckboxId.ALL) {
+      if (updatedCheckboxes[id]) {
+        Object.keys(updatedCheckboxes).forEach((key) => {
+          updatedCheckboxes[key as CheckboxId] = true;
+        });
+      } else {
+        Object.keys(updatedCheckboxes).forEach((key) => {
+          updatedCheckboxes[key as CheckboxId] = false;
+        });
+      }
+    } else {
+      if (checkedCheckbox[CheckboxId.ALL] && !updatedCheckboxes[id]) {
+        updatedCheckboxes[CheckboxId.ALL] = false;
+      }
+    }
+
+    const isAllChecked = Object.keys(updatedCheckboxes)
+      .filter((key) => key !== CheckboxId.ALL)
+      .every((key) => updatedCheckboxes[key as CheckboxId]);
+
+    if (isAllChecked) {
+      updatedCheckboxes[CheckboxId.ALL] = true;
+    }
+
+    dispatch({ type: CheckboxActionTypes.TURN_ON, payload: updatedCheckboxes });
+  };
 
   return (
     <AsidePanelContainer>
       <Title>КОЛИЧЕСТВО ПЕРЕСАДОК</Title>
-      <CheckboxContainer>
-        <CheckboxLabel>
-          <input
-            type="checkbox"
-            checked={checkboxes.all}
-            onChange={(e) => dispatch(toggleCheckboxAll(e.target.checked))}
-          />
-          Все
-        </CheckboxLabel>
-        <CheckboxLabel>
-          <input
-            type="checkbox"
-            checked={checkboxes.noTransfers}
-            onChange={(e) =>
-              dispatch(toggleCheckboxNoTransfers(e.target.checked))
-            }
-          />
-          Без пересадок
-        </CheckboxLabel>
-        <CheckboxLabel>
-          <input
-            type="checkbox"
-            checked={checkboxes.oneTransfer}
-            onChange={(e) =>
-              dispatch(toggleCheckboxOneTransfer(e.target.checked))
-            }
-          />
-          1 пересадка
-        </CheckboxLabel>
-        <CheckboxLabel>
-          <input
-            type="checkbox"
-            checked={checkboxes.twoTransfers}
-            onChange={(e) =>
-              dispatch(toggleCheckboxTwoTransfers(e.target.checked))
-            }
-          />
-          2 пересадки
-        </CheckboxLabel>
-        <CheckboxLabel>
-          <input
-            type="checkbox"
-            checked={checkboxes.threeTransfers}
-            onChange={(e) =>
-              dispatch(toggleCheckboxThreeTransfers(e.target.checked))
-            }
-          />
-          3 пересадки
-        </CheckboxLabel>
-      </CheckboxContainer>
+      {checkboxes.map((checkbox) => {
+        const { id, label, name } = checkbox;
+        return (
+          <CheckboxContainer key={id}>
+            <CheckboxLabel>
+              <input
+                type="checkbox"
+                id={id}
+                name={name}
+                checked={checkedCheckbox[id] || false}
+                onChange={() => handleCheckboxChange(id)}
+              />
+              <label htmlFor={id}>{label}</label>
+            </CheckboxLabel>
+          </CheckboxContainer>
+        );
+      })}
     </AsidePanelContainer>
   );
 };
