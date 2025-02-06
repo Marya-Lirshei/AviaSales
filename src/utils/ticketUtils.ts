@@ -1,23 +1,29 @@
-import { CheckboxId, Segment, TabsTicket, TypeTicket } from "../types";
+import { CheckboxId, TSegment, TabsTicket, TTypeTicket } from "../types";
 
-export const isTicketMatchesFilters = (tickets: TypeTicket, filters: Record<CheckboxId, boolean>) => {
+export const isTicketMatchesFilters = (tickets: TTypeTicket, filters: Record<CheckboxId, boolean>) => {
     if (filters[CheckboxId.ALL]) {
       return true;
     }
 
-    return tickets.segments.every((segment: Segment) => {
+    return tickets.segments.every((segment: TSegment) => {
       const stopsCount = segment.stops.length;
 
-      return (
-        (filters[CheckboxId.NONE_TRANSFER] && stopsCount === 0) ||
-        (filters[CheckboxId.ONE_TRANSFER] && stopsCount === 1) ||
-        (filters[CheckboxId.TWO_TRANSFER] && stopsCount === 2) ||
-        (filters[CheckboxId.THREE_TRANSFER] && stopsCount === 3)
-      );
+      switch (stopsCount) {
+        case 0:
+          return filters[CheckboxId.NONE_TRANSFER];
+        case 1:
+          return filters[CheckboxId.ONE_TRANSFER];
+        case 2:
+          return filters[CheckboxId.TWO_TRANSFER];
+        case 3:
+          return filters[CheckboxId.THREE_TRANSFER];
+        default:
+          return false;
+      }
     });
   };
 
-  export const sortTickets = (tickets: TypeTicket[], tabName: TabsTicket) => {
+  export const sortTickets = (tickets: TTypeTicket[], tabName: TabsTicket) => {
     switch (tabName) {
       case TabsTicket.CHEAPEST:
         return [...tickets].sort((a, b) => a.price - b.price);

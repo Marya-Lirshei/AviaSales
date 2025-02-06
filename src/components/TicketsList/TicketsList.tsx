@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSearchId } from "../asyncAction/AsyncSearchId";
 import { useEffect, useState, useMemo } from "react";
 import { RootState } from "../../store/store";
-import { TypeTicket } from "../../types";
+import { TTypeTicket } from "../../types";
 import Tabs from "../Tabs/Tabs";
-import { useTicketsPack } from "../asyncAction/useTicketsPack";
+import { useTicketsPack } from "../Hooks/useTicketsPack";
 import { ListWrapper, ShowMoreButton, WrapperUl, Notification } from "./theme";
 import { isTicketMatchesFilters, sortTickets } from "../../utils/ticketUtils";
 
@@ -26,7 +26,6 @@ const TicketsList: React.FC = () => {
     dispatch(getSearchId());
   }, [dispatch]);
 
-
   const filteredTickets = useMemo(() => {
     return tickets.filter((ticket) => isTicketMatchesFilters(ticket, filters));
   }, [tickets, filters]);
@@ -34,7 +33,6 @@ const TicketsList: React.FC = () => {
   const sortedTickets = useMemo(() => {
     return sortTickets(filteredTickets, tabName);
   }, [filteredTickets, tabName]);
-  
 
   const isAnyFilterSelected = Object.values(filters).some((value) => value);
 
@@ -46,13 +44,15 @@ const TicketsList: React.FC = () => {
     <WrapperUl>
       <Tabs />
       <ListWrapper>
-        {sortedTickets.slice(0, visibleTickets).map((ticket: TypeTicket, index: number) => (
-          <TicketsItem
-            key={index}
-            price={ticket.price}
-            segments={ticket.segments}
-          />
-        ))}
+        {sortedTickets
+          .slice(0, visibleTickets)
+          .map((ticket: TTypeTicket, index: number) => (
+            <TicketsItem
+              key={index}
+              price={ticket.price}
+              segments={ticket.segments}
+            />
+          ))}
       </ListWrapper>
       {isAnyFilterSelected ? (
         <ShowMoreButton onClick={handleShowMore}>Показать еще</ShowMoreButton>

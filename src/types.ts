@@ -6,17 +6,17 @@ export const enum CheckboxId {
   NONE_TRANSFER = 'NONE_TRANSFER',
 }
 
-export type CheckboxState = {
+export type TCheckboxState = {
   [key in CheckboxId]: boolean;
 };
 
 export type TStateCheckbox = {
-  checkbox: CheckboxState,
+  checkbox: TCheckboxState,
 }
 
 export type TSetCheckboxAction = {
   type: CheckboxActionTypes,
-  payload: Partial<CheckboxState>,
+  payload: Partial<TCheckboxState>,
 }
 
 export enum CheckboxActionTypes {
@@ -48,16 +48,16 @@ export enum TabsActionTypes {
 
 export type TActionTab = TSetTabsAction 
 
-export type Segment = {
+export type TSegment = {
   stops: string[];
 };
 
-export interface TicketsItemProps {
+export interface ITicketsItemProps {
   price: number;
-  segments: TypeTicket["segments"];
+  segments: TTypeTicket["segments"];
 }//это из ticketsItem
 
-export type TypeTicket = {
+export type TTypeTicket = {
   // Цена в рублях
   price: number;
   // Код авиакомпании (iata)

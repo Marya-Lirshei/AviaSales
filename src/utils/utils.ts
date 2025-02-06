@@ -9,7 +9,7 @@ export function convertDate(time: string, duration: number) {
   const departureTime = new Date(time);
 
   // Форматируем время отправления в "HH:MM"
-  const formatTime = (date: any) => {
+  const formatTime = (date: Date) => {
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes}`;

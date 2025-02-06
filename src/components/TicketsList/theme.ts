@@ -17,22 +17,22 @@ export const ListWrapper = styled.ul`
 
 export const ShowMoreButton = styled.button`
   padding: 10px 20px;
-  background-color: #41a891; /* Основной цвет кнопки */
+  background-color: #41a891;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  margin: 20px auto; /* Центрирование по горизонтали и отступ сверху */
-  display: block; /* Чтобы margin: auto работал */
-  transition: background-color 0.3s ease; /* Плавное изменение цвета */
+  margin: 20px auto;
+  display: block;
+  transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #45a049; /* Цвет при наведении */
+    background-color: #45a049;
   }
 
   &:active {
-    background-color: #3d8b40; /* Цвет при нажатии */
+    background-color: #3d8b40;
   }
 `;
 

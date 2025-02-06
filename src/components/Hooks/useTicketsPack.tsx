@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { BASE_URL } from "./AsyncSearchId";
+import { BASE_URL } from "../asyncAction/AsyncSearchId";
+import { TTypeTicket } from "../../types";
 
 export const useTicketsPack = () => {
-  const [tickets, setTickets] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<TTypeTicket[]>([]);
   const [stop, setStop] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,6 +24,7 @@ export const useTicketsPack = () => {
             throw new Error("Ошибка при получении билетов");
           }
           const data = await response.json();
+          console.log("data: ", data);
           setTickets((prevTickets) => [...prevTickets, ...data.tickets]);
           stop = data.stop;
           count = 0;
