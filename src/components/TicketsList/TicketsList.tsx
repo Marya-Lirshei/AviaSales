@@ -32,7 +32,7 @@ const TicketsList: React.FC = () => {
 
   const sortedTickets = useMemo(() => {
     return sortTickets(filteredTickets, tabName);
-  }, [filteredTickets, tabName]);
+  }, [filteredTickets, tabName]); 
 
   const isAnyFilterSelected = Object.values(filters).some((value) => value);
 

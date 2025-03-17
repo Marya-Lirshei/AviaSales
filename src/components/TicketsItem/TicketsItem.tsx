@@ -1,3 +1,4 @@
+import React from "react";
 import icon from "../../../public/S7 Logo.svg";
 import { ITicketsItemProps } from "../../types";
 import { convertDate, formatDuration } from "../../utils/utils";
@@ -32,4 +33,4 @@ const TicketsItem: React.FC<ITicketsItemProps> = ({ price, segments }) => {
   );
 };
 
-export default TicketsItem;
+export default React.memo(TicketsItem);
