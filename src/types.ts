@@ -33,8 +33,12 @@ export const enum TabsTicket {
   OPTIMAL = 'OPTIMAL',
 }
 
-export type TStateTab = {
+export type TStateTickets = {
   tabName: TabsTicket;
+  allTickets: TTypeTicket[];
+  visibleTickets: number;
+  loading: boolean;
+  error: boolean;
 }
 
 export type TSetTabsAction = {

@@ -1,19 +1,29 @@
-import { TActionTab, TStateTab, TabsActionTypes, TabsTicket } from "../types";
+import {
+  TActionTab,
+  TStateTickets,
+  TabsActionTypes,
+  TabsTicket,
+} from "../types";
 
-const initialState: TStateTab = {
+const initialState: TStateTickets = {
   tabName: TabsTicket.CHEAPEST,
+  allTickets: [],
+  visibleTickets: 5,
+  loading: true,
+  error: false,
 };
 
-export const tabsReducer = (
+export const ticketsReducer = (
   state = initialState,
   action: TActionTab
-): TStateTab => {
+): TStateTickets => {
   switch (action.type) {
     case TabsActionTypes.SET_TABS: {
       return {
         ...state,
         tabName: action.payload,
       };
+      
     }
     default:
       return state;

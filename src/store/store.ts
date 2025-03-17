@@ -3,11 +3,11 @@ import { combineReducers, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { thunk } from "redux-thunk";
 import { checkboxReducer } from './checkboxReducer';
-import { tabsReducer } from "./tabsReducer";
+import { ticketsReducer } from "./ticketsReducer";
 
 const rootReducer = combineReducers({
     checkbox: checkboxReducer,
-    tabs: tabsReducer,
+    tickets: ticketsReducer,
 })
 
 export const store= createStore(

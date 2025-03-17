@@ -6,7 +6,8 @@ import { TabItem, TabsWrapper } from "./theme";
 
 const Tabs: React.FC = () => {
   const dispatch = useDispatch();
-  const tabName = useSelector((state: RootState) => state.tabs.tabName);
+  // const tabName = useSelector((state: RootState) => state.tabs.tabName);
+  const tabName = TabsTicket.CHEAPEST;
 
   const tabs = [
     { id: TabsTicket.CHEAPEST, name: "Самый дешевый" },

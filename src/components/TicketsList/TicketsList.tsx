@@ -10,15 +10,15 @@ import { ListWrapper, ShowMoreButton, WrapperUl, Notification } from "./theme";
 import { isTicketMatchesFilters, sortTickets } from "../../utils/ticketUtils";
 
 const TicketsList: React.FC = () => {
-  const { tickets, error } = useTicketsPack();
+  // const { tickets, error } = useTicketsPack();
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  // if (error) {
+  //   return <div>{error}</div>;
+  // }
 
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.checkbox.checkbox);
-  const tabName = useSelector((state: RootState) => state.tabs.tabName);
+  const tabName = useSelector((state: RootState) => state.tickets.tabName);
 
   const [visibleTickets, setVisibleTickets] = useState(5);
 
@@ -26,15 +26,15 @@ const TicketsList: React.FC = () => {
     dispatch(getSearchId());
   }, [dispatch]);
 
-  const filteredTickets = useMemo(() => {
-    return tickets.filter((ticket) => isTicketMatchesFilters(ticket, filters));
-  }, [tickets, filters]);
+  // const filteredTickets = useMemo(() => {
+  //   return tickets.filter((ticket) => isTicketMatchesFilters(ticket, filters));
+  // }, [tickets, filters]);
 
-  const sortedTickets = useMemo(() => {
-    return sortTickets(filteredTickets, tabName);
-  }, [filteredTickets, tabName]); 
+  // const sortedTickets = useMemo(() => {
+  //   return sortTickets(filteredTickets, tabName);
+  // }, [filteredTickets, tabName]);
 
-  const isAnyFilterSelected = Object.values(filters).some((value) => value);
+  // const isAnyFilterSelected = Object.values(filters).some((value) => value);
 
   const handleShowMore = () => {
     setVisibleTickets((prevCount) => prevCount + 5);
@@ -44,7 +44,7 @@ const TicketsList: React.FC = () => {
     <WrapperUl>
       <Tabs />
       <ListWrapper>
-        {sortedTickets
+        {[]
           .slice(0, visibleTickets)
           .map((ticket: TTypeTicket, index: number) => (
             <TicketsItem
@@ -54,7 +54,8 @@ const TicketsList: React.FC = () => {
             />
           ))}
       </ListWrapper>
-      {isAnyFilterSelected ? (
+      {/* {isAnyFilterSelected ? ( */}
+      {1 ? (
         <ShowMoreButton onClick={handleShowMore}>Показать еще</ShowMoreButton>
       ) : (
         <Notification>Выберите количество пересадок.</Notification>

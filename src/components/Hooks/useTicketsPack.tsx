@@ -3,9 +3,10 @@ import { BASE_URL } from "../asyncAction/AsyncSearchId";
 import { TTypeTicket } from "../../types";
 
 export const useTicketsPack = () => {
-  const [tickets, setTickets] = useState<TTypeTicket[]>([]);
-  const [stop, setStop] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [tickets, setTickets] = useState<TTypeTicket[]>([]);
+  // console.log("🐯 ~ useTicketsPack ~ tickets:", tickets)
+  // const [stop, setStop] = useState<boolean>(false);
+  // const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const searchId = localStorage.getItem("searchId");
@@ -25,14 +26,14 @@ export const useTicketsPack = () => {
           }
           const data = await response.json();
           console.log("data: ", data);
-          setTickets((prevTickets) => [...prevTickets, ...data.tickets]);
+          // setTickets((prevTickets) => [...prevTickets, ...data.tickets]);
           stop = data.stop;
           count = 0;
-          setStop(true);
+          // setStop(true);
         } catch (error) {
           count++;
           if (count > 3) {
-            setError("Превышено количество попыток запроса");
+            // setError("Превышено количество попыток запроса");
             console.error("Ошибка при получении билетов:", error);
           }
         }
@@ -42,5 +43,5 @@ export const useTicketsPack = () => {
     fetchTickets();
   }, []);
 
-  return { tickets, stop, error };
+  // return { tickets, stop, error };
 };
