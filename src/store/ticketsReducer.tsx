@@ -8,9 +8,11 @@ import {
 const initialState: TStateTickets = {
   tabName: TabsTicket.CHEAPEST,
   allTickets: [],
-  visibleTickets: 5,
+  visibleTickets:[],
+  visibleCount: 5,
+  // showMore: [],
   loading: true,
-  error: false,
+  error: "",
 };
 
 export const ticketsReducer = (
@@ -23,7 +25,32 @@ export const ticketsReducer = (
         ...state,
         tabName: action.payload,
       };
-      
+    }
+    case TabsActionTypes.SET_TICKETS: {
+      return {
+        ...state,
+        allTickets: [...state.allTickets, ...action.payload],
+        visibleTickets: [...state.allTickets, ...action.payload].slice(0, state.visibleCount)      };
+    }    
+    case TabsActionTypes.SET_VISIBLE_COUNT: {
+      // const newVisibleCount = state.visibleCount + action.payload;
+      return {
+        ...state,
+        visibleCount: state.visibleCount + action.payload,
+        visibleTickets: state.allTickets.slice(0, state.visibleCount + action.payload),
+      };
+    }
+    case TabsActionTypes.SET_LOADING: {
+      return {
+        ...state,
+        loading: action.payload,
+      };
+    }
+    case TabsActionTypes.SET_ERROR: {
+      return {
+        ...state,
+        error: action.payload,
+      };
     }
     default:
       return state;

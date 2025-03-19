@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { BASE_URL } from "../asyncAction/AsyncSearchId";
-import { TTypeTicket } from "../../types";
+import { TabsActionTypes, TStateTickets } from "../../types";
+import { useDispatch, useSelector } from "react-redux";
 
 export const useTicketsPack = () => {
-  // const [tickets, setTickets] = useState<TTypeTicket[]>([]);
-  // console.log("🐯 ~ useTicketsPack ~ tickets:", tickets)
-  // const [stop, setStop] = useState<boolean>(false);
-  // const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const error = useSelector((state: TStateTickets) => state.error);
 
   useEffect(() => {
     const searchId = localStorage.getItem("searchId");
@@ -16,6 +15,7 @@ export const useTicketsPack = () => {
     let count = 0;
 
     const fetchTickets = async () => {
+      dispatch({ type: TabsActionTypes.SET_LOADING, payload: true }); 
       while (!stop) {
         try {
           const response = await fetch(
@@ -26,22 +26,31 @@ export const useTicketsPack = () => {
           }
           const data = await response.json();
           console.log("data: ", data);
-          // setTickets((prevTickets) => [...prevTickets, ...data.tickets]);
+          dispatch({
+            type: TabsActionTypes.SET_TICKETS,
+            payload: data.tickets
+          })
+
           stop = data.stop;
           count = 0;
-          // setStop(true);
-        } catch (error) {
+        } catch (err) {
           count++;
           if (count > 3) {
-            // setError("Превышено количество попыток запроса");
+            const error = err as Error
             console.error("Ошибка при получении билетов:", error);
+            stop = true; 
+            dispatch({
+              type: TabsActionTypes.SET_ERROR,
+              payload: error.message,
+            });
           }
         }
       }
+      dispatch({ type: TabsActionTypes.SET_LOADING, payload: false });
     };
 
     fetchTickets();
-  }, []);
+  }, [dispatch]);
 
-  // return { tickets, stop, error };
+  return { error };
 };

@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const TabsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  //   background-color: blue;
   height: 60px;
   margin-bottom: 20px;
 `;

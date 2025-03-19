@@ -7,11 +7,11 @@ import {
 
 const initialState: TStateCheckbox = {
   checkbox: {
-    [CheckboxId.ALL]: false,
+    [CheckboxId.ALL]: true,
     [CheckboxId.NONE_TRANSFER]: true,
-    [CheckboxId.ONE_TRANSFER]: false,
-    [CheckboxId.TWO_TRANSFER]: false,
-    [CheckboxId.THREE_TRANSFER]: false,
+    [CheckboxId.ONE_TRANSFER]: true,
+    [CheckboxId.TWO_TRANSFER]: true,
+    [CheckboxId.THREE_TRANSFER]: true,
   },
 };
 
